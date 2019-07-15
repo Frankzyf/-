@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qdu.mapper.RoleMapper">
+   <resultMap type="com.qdu.model.RoleModel" id="role">
+		<id column="id" property="id" />
+		<result column="role_code" property="roleCode" />
+		<result column="role_name" property="roleName" />
+	</resultMap>
+	<update id="update" parameterType="com.qdu.model.RoleModel">
+        update role
+        <set>
+            <if test="roleName != null">role_name=#{roleName},</if>
+        </set>
+        where role_code=#{roleCode}
+    </update>
+	
+	<delete id = "deleteByCode" parameterType="com.qdu.model.RoleModel" >
+	  delete from role where role_code=#{roleCode}
+	</delete>
+	
+	<insert id = "insert"  parameterType="com.qdu.model.RoleModel" >
+	  insert into role(role_code,role_name)  value(#{roleCode},#{roleName})
+	</insert>
+	 
+	<select id="selectByCode" resultMap="role">
+	   select * from role where role_code = #{roleCode}
+	</select>
+	
+	<select id="count" resultType="Integer">
+	select count(*) from role
+	</select>
+	
+	<select id="selectAll" resultMap="role">
+	select * from role limit #{before},#{after}
+	</select>
+</mapper>

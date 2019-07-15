@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qdu.mapper.UserMapper">
+	<resultMap type="com.qdu.model.UserModel" id="user">
+		<id column="id" property="id" />
+		<result column="user_code" property="userCode" />
+		<result column="user_pass" property="userPass" />
+		<result column="user_name" property="userName" />
+		<result column="role_code" property="roleCode" />
+		<result column="parent_code" property="parentCode" />
+	</resultMap>
+	<update id="update" parameterType="com.qdu.model.UserModel">
+		update user
+		<set>
+			<if test="userName != null">user_name=#{userName},</if>
+			<if test="userPass != null">user_pass=#{userPass},</if>
+			<if test="roleCode != null">role_code=#{roleCode},</if>
+			<if test="parentCode != null">parent_code=#{parentCode},</if>
+		</set>
+		where user_code=#{userCode}
+	</update>
+
+	<select id="selectByCode" resultMap="user">
+		select * from user where user_code = #{userCode}
+	</select>
+
+	<delete id="deleteByCode"
+		parameterType="com.qdu.model.UserModel">
+		delete from user where user_code=#{userCode}
+	</delete>
+
+	<insert id="addUser" parameterType="com.qdu.model.UserModel">
+		insert into
+		user(user_name,user_pass,user_code,role_code,parent_code)
+		value(#{userName},#{userPass},#{userCode},#{roleCode},#{parentCode})
+	</insert>
+	<select id="selectAllUser" resultMap="user">
+	select * from user
+	</select>
+
+	<select id="selectAll" resultMap="user">
+		select * from user
+		<where>
+			<if test="user.userCode != null and user.userCode != ''">
+				and user_code like "%"#{user.userCode}"%"
+			</if>
+			<if test="user.userName != null and user.userName != ''">
+				and user_name like "%"#{user.userName}"%"
+			</if>
+		</where>
+		limit #{before},#{after}
+	</select>
+
+	<select id="count" resultType="Integer">
+		select count(*) from user
+	</select>
+
+	<select id="selectUser" resultMap="user">
+		select * from user
+		<where>
+			<if test="userCode!=null">
+				user_code = #{userCode}
+			</if>
+			<if test="userPass!=null">
+				and user_pass = #{userPass}
+			</if>
+		</where>
+
+	</select>
+</mapper>

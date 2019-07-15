@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qdu.mapper.RightsMapper">
+   <resultMap type="com.qdu.model.RightsModel" id="rights">
+		<id column="id" property="id" />
+		<result column="role_code" property="roleCode" />
+		<result column="menu_code" property="menuCode" />
+	</resultMap>
+	<update id="update" parameterType="com.qdu.model.RightsModel">
+        update rights
+        <set>
+            <if test="menuCode != null">menu_code=#{menuCode},</if>
+        </set>
+        where role_code=#{roleCode}
+    </update>
+	
+	<delete id = "deleteByCode" parameterType="com.qdu.model.RightsModel" >
+	  delete from rights where role_code=#{roleCode} and id=#{id}
+	</delete>
+	
+	<insert id = "insert"  parameterType="com.qdu.model.RightsModel" >
+	  insert into rights(role_code,menu_code)  value(#{roleCode},#{menuCode})
+	</insert>
+	 
+	<select id="selectByCode" resultMap="rights">
+	   select * from rights where role_code = #{roleCode} and menu_code=#{menuCode}
+	</select>
+	
+	<select id="count" resultType="Integer">
+	select count(*) from rights
+	</select>
+	
+	<select id="selectAll" resultMap="rights">
+	select * from rights
+		<where>
+			<if test="rr.roleCode != null and rr.roleCode != ''">
+				and role_code like "%"#{rr.roleCode}"%"
+			</if>
+			<if test="rr.menuCode != null and rr.menuCode != ''">
+				and menu_code like "%"#{rr.menuCode}"%"
+			</if>
+		</where>
+		order by role_code limit #{before},#{after}
+	</select>
+</mapper>

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qdu.mapper.OrderInfoMapper">
+	<resultMap type="com.qdu.model.OrderInfoModel" id="order">
+		<id column="id" property="id" />
+		<result column="user_code" property="userCode" />
+		<result column="cust_code" property="custCode" />
+		<result column="prod_code" property="prodCode" />
+		<result column="count" property="count" />
+		<result column="time" property="time" />
+		<result column="status" property="status" />
+	</resultMap>
+	
+	<insert id="insert" parameterType="com.qdu.model.OrderInfoModel">
+	 insert into order_info(user_code,cust_code,prod_code,count,time,status) values(#{userCode},#{custCode},#{prodCode},#{count},#{time},#{status}) 
+	</insert>
+	
+	<delete id="deleteModel" parameterType="com.qdu.model.OrderInfoModel">
+	  delete from order_info where user_code=#{userCode}
+	</delete>
+	
+	<update id="updateActive" parameterType="com.qdu.model.OrderInfoModel">
+	 update order_info
+        <set>
+            <if test="custCode != null">cust_code=#{custCode},</if>
+            <if test="prodCode != null">prod_code=#{prodCode},</if>
+            <if test="count != null">count=#{count},</if>
+            <if test="time != null">time=#{time},</if>
+            <if test="status != null">status=#{status},</if>
+        </set>
+        where user_code=#{userCode}
+	</update>
+	
+	<select id="selectModel" resultMap="order">
+	  select * from order_info where user_code=#{userCode}
+	</select>
+	
+	<select id="selectModelPage" resultMap="order">
+		select * from order_info
+		<where>
+			<if test="example.userCode != null and example.userCode != ''">
+				and user_code like "%"#{example.userCode}"%"
+			</if>
+			<if test="example.custCode != null and example.custCode != ''">
+				and cust_code like "%"#{example.custCode}"%"
+			</if>
+		</where>
+		limit #{before},#{after}
+	</select>
+	
+	<select id="selectAll" resultMap="order">
+	   select * from order_info
+	</select>
+	
+	<select id="selectCount" resultType="Integer">
+	select count(*) from order_info
+	</select>
+</mapper>

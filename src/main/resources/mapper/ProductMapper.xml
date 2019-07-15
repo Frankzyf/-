@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qdu.mapper.ProductMapper">
+	<resultMap type="com.qdu.model.ProductModel" id="product">
+		<id column="id" property="id" />
+		<result column="code" property="code" />
+		<result column="name" property="name" />
+		<result column="sum" property="sum" />
+		<result column="cost" property="cost" />
+	</resultMap>
+	
+	<insert id="insert" parameterType="com.qdu.model.ProductModel">
+	 insert into product(code,name,sum,cost) values(#{code},#{name},#{sum},#{cost}) 
+	</insert>
+	
+	<delete id="deleteModel" parameterType="com.qdu.model.ProductModel">
+	  delete from product where code=#{code}
+	</delete>
+	
+	<update id="updateActive" parameterType="com.qdu.model.ProductModel">
+	 update product
+        <set>
+            <if test="code != null">code=#{code},</if>
+            <if test="name != null">name=#{name},</if>
+            <if test="sum != null">sum=#{sum},</if>
+            <if test="cost != null">cost=#{cost},</if>
+        </set>
+        where code=#{code}
+	</update>
+	
+	<select id="selectModel" resultMap="product">
+	  select * from product where code=#{code}
+	</select>
+	
+	<select id="selectModelPage" resultMap="product">
+		select * from product
+		<where>
+			<if test="example.code != null and example.code != ''">
+				and code like "%"#{example.code}"%"
+			</if>
+			<if test="example.name != null and example.name != ''">
+				and name like "%"#{example.name}"%"
+			</if>
+		</where>
+		limit #{before},#{after}
+	</select>
+	
+	<select id="selectAll" resultMap="product">
+	   select * from product
+	</select>
+	
+	<select id="selectCount" resultType="Integer">
+	select count(*) from product
+	</select>
+</mapper>

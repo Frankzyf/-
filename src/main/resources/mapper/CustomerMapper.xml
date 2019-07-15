@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qdu.mapper.CustomerMapper">
+	<resultMap type="com.qdu.model.CustomerModel" id="customer">
+		<id column="id" property="id" />
+		<result column="cust_code" property="custCode" />
+		<result column="cust_name" property="custName" />
+		<result column="status" property="status" />
+		<result column="email" property="email" />
+	</resultMap>
+	
+	<insert id="insert" parameterType="com.qdu.model.CustomerModel">
+	 insert into customer(cust_code,cust_name,status,email) values(#{custCode},#{custName},#{status},#{email}) 
+	</insert>
+	
+	<delete id="deleteModel" parameterType="com.qdu.model.CustomerModel">
+	  delete from customer where cust_code=#{custCode}
+	</delete>
+	
+	<update id="updateActive" parameterType="com.qdu.model.CustomerModel">
+	 update customer
+        <set>
+            <if test="custName != null">cust_name=#{custName},</if>
+            <if test="status != null">status=#{status},</if>
+            <if test="email != null">email=#{email},</if>
+        </set>
+        where cust_code=#{custCode}
+	</update>
+	
+	<select id="selectModel" resultMap="customer">
+	  select * from customer where cust_code=#{custCode}
+	</select>
+	
+	<select id="selectModelPage" resultMap="customer">
+		select * from customer
+		<where>
+			<if test="example.custCode != null and example.custCode != ''">
+				and cust_code like "%"#{example.custCode}"%"
+			</if>
+			<if test="example.custName != null and example.custName != ''">
+				and cust_name like "%"#{example.custName}"%"
+			</if>
+		</where>
+		limit #{before},#{after}
+	</select>
+	
+	<select id="selectAll" resultMap="customer">
+	   select * from customer
+	</select>
+	
+	<select id="selectCount" resultType="Integer">
+	select count(*) from customer
+	</select>
+</mapper>
