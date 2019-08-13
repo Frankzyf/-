@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
+﻿<%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%
 	pageContext.setAttribute("PATH", request.getContextPath());
@@ -18,6 +18,7 @@
 </head>
 
 <body>
+<h1>nihao</h1>
 	<div class="padding-all">
 		<div class="header">
 			<h1>皮皮怪管理系统</h1>
